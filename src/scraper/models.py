@@ -2,6 +2,10 @@ from django.db import models
 from pytils.translit import slugify
 
 
+def default_url():
+    return {"hh": "", "superjob": "", "gorodrabot": ""}
+
+
 class City(models.Model):
     name = models.CharField(max_length=50, 
                             verbose_name='City name',
@@ -51,6 +55,31 @@ class Vacancy(models.Model):
     class Meta:
         verbose_name = "Vacancy"
         verbose_name_plural = "Vacancies"
+        ordering = ['-timestamp']
 
     def __str__(self):
         return self.title
+
+
+class Error(models.Model):
+    timestamp = models.DateField(auto_now_add=True)
+    data = models.JSONField()
+
+
+class Url(models.Model):
+    city = models.ForeignKey(
+        'City',
+        on_delete=models.CASCADE,
+        verbose_name='City'
+    )
+    specialization = models.ForeignKey(
+        'Specialization',
+        on_delete=models.CASCADE,
+        verbose_name='Specialization'
+    )
+    url_data = models.JSONField(
+        default=default_url
+    )
+
+    class Meta:
+        unique_together = ('city', 'specialization')

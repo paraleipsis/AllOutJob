@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout, get_user_model
-from subscription.forms import UserLoginForm, UserRegistrationForm, UserUpdateForm
+from subscription.forms import UserLoginForm, UserRegistrationForm, UserUpdateForm, ContactForm
 from django.contrib import messages
+import datetime as dt
 
 User = get_user_model()
 
@@ -35,6 +36,7 @@ def register_view(request):
 
 
 def update_view(request):
+    contact_form = ContactForm()
     if request.user.is_authenticated:
         user = request.user
         if request.method == 'POST':
@@ -53,7 +55,13 @@ def update_view(request):
                 'specialization': user.specialization,
                 'sub_on': user.sub_on
             })
-        return render(request, 'subscription/update.html', {'form': form})
+        return render(
+            request,
+            'subscription/update.html',
+            {
+                'form': form,
+                'contact_form': contact_form
+            })
 
     else:
         return redirect('subscription:login')
@@ -67,3 +75,31 @@ def delete_view(request):
             qs.delete()
             messages.error(request, 'User is deleted')
     return redirect('subscription:login')
+
+
+def contact(request):
+    if request.method == 'POST':
+        contact_form = ContactForm(request.POST or None)
+        if contact_form.is_valid():
+            data = contact_form.cleaned_data
+            city = data.get('city')
+            specialization = data.get('specialization')
+            email = data.get('email')
+            qs = Error.objects.filter(timestamp=dt.date.today())
+            if qs.exists():
+                err = qs.first()
+                data = err.data.get('user_data', [])
+                data.append({'city': city, 'specialization': specialization, 'email': email})
+                err.data['user_data'] = data
+                err.save()
+            else:
+                data = [{'city': city, 'specialization': specialization, 'email': email}]
+                Error(data=f"user_data:{data}").save()
+            messages.success(request, 'Data send')
+            return redirect('subscription:update')
+        else:
+            return redirect('subscription:update')
+    else:
+        return redirect('subscription:login')
+
+

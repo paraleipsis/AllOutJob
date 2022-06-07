@@ -67,13 +67,23 @@ if qs.exists():
     subject = f'Scraping errors for {today}'
     text_content = 'Scraping errors'
 
+    data = error.data.get('user_data')
+    if data:
+        _html += '<hr>'
+        _html += '<h2>Feedback</h2>'
+    for i in data:
+        _html += f'<p">City: {i["city"]}, Specialization: {i["specialization"]}, Email: {i["email"]}</p><br>'
+    subject = f'Feedback {today}'
+    text_content = 'Feedback'
+
 
 qs = Url.objects.all().values('city', 'specialization')
 urls_dct = {(i['city'], i['specialization']): True for i in qs}
 urls_errors = ''
 for keys in users_dct.keys():
     if keys not in urls_dct:
-        urls_errors += f'<p">For City: {keys[0]} and Specialization: {keys[1]} URLs not found</p><br>'
+        if keys[0] and keys[1]:
+            urls_errors += f'<p">For City: {keys[0]} and Specialization: {keys[1]} URLs not found</p><br>'
 
 if urls_errors:
     subject += 'URLs not found'

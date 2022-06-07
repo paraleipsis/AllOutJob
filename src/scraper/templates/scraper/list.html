@@ -3,28 +3,21 @@
 {% block title %} Home {% endblock %}
 
 {% block content %}
+{% if object_list %}
+<h3 class="my-4 text-center">Results</h3>
 {% for obj in object_list %}
 <div class="card my-3">
     <div class="card-header">
         <a href="{{ obj.url }}">{{ obj.title }}</a>
     </div>
     <div class="card-body">
-        <h4>{{ obj.company }}</h4>
         <p class="card-text">{{ obj.description }}</p>
+        <p>{{ obj.company }}</p>
         <p>{{obj.city.name }} | {{obj.specialization.name }} |
             <small>{{obj.timestamp|date:"d-m-Y" }}</small></p>
     </div>
 </div>
-{% empty %}
-<div class="row">
-    <div class="my-3 mx-auto">
-        <h3>Nothing found</h3>
-    </div>
-</div>
-
 {% endfor %}
-
-{% if object_list %}
 <div class="row">
     <div class="col">
 
@@ -41,7 +34,8 @@
 
                 {% for page in object_list.paginator.page_range %}
                 <li class="page-item {% if page == object_list.number %} active {% endif %}">
-                    <a class="page-link" href="?city={{ city }}&specialization={{ specialization }}&page={{ page }}">{{ page }}
+                    <a class="page-link" href="?city={{ city }}&specialization={{ specialization }}&page={{ page }}">{{
+                        page }}
                     </a>
                 </li>
                 {% endfor %}
@@ -75,6 +69,12 @@
         <!--            {% endif %}-->
         <!--        </span>-->
         <!--        </div>-->
+    </div>
+</div>
+{% else %}
+<div class="row">
+    <div class="my-3 mx-auto">
+        <h3>Nothing found</h3>
     </div>
 </div>
 {% endif %}

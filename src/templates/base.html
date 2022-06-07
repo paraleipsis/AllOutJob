@@ -1,4 +1,5 @@
 <!doctype html>
+{% load static %}
 <html lang="en">
 <head>
     <!-- Required meta tags -->
@@ -10,6 +11,8 @@
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <title>{% block title %}Site{% endblock %}</title>
+
+    <link rel="icon" href="{% static 'favicon.ico' %}">
 </head>
 <body>
 
@@ -27,21 +30,21 @@
                 {% if user.is_authenticated %}
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'subscription:logout' %} ">Выйти</a>
+                    <a class="nav-link" href="{% url 'subscription:logout' %} ">Logout</a>
                 </li>
 
                 <li class="nav-item {% if request.path == update_url %} active {% endif %} ">
-                    <a class="nav-link" href="{% url 'subscription:update' %} ">Профиль</a>
+                    <a class="nav-link" href="{% url 'subscription:update' %} ">Profile</a>
                 </li>
 
                 {% else %}
 
                 <li class="nav-item {% if request.path == login_url %} active {% endif %}">
-                    <a class="nav-link" href="{% url 'subscription:login' %}">Войти</a>
+                    <a class="nav-link" href="{% url 'subscription:login' %}">Login</a>
                 </li>
 
                 <li class="nav-item {% if request.path == register_url %} active {% endif %}">
-                    <a class="nav-link" href="{% url 'subscription:register' %}">Регистрация</a>
+                    <a class="nav-link" href="{% url 'subscription:register' %}">Registration</a>
                 </li>
 
                 {% endif %}

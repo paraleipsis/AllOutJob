@@ -3,9 +3,9 @@
 {% block title %} Home {% endblock %}
 
 {% block content %}
-{% if object_list %}
+{% if page_obj %}
 <h3 class="my-4 text-center">Results</h3>
-{% for obj in object_list %}
+{% for obj in page_obj %}
 <div class="card my-3">
     <div class="card-header">
         <a href="{{ obj.url }}">{{ obj.title }}</a>
@@ -23,7 +23,7 @@
 
         <nav aria-label="Page navigation example">
             <ul class="pagination">
-                {% if object_list.has_previous %}
+                {% if page_obj.has_previous %}
                 <li class="page-item">
                     <a class="page-link" href="?city={{ city }}&specialization={{ specialization }}&page=1"
                        aria-label="Previous">
@@ -32,18 +32,17 @@
                 </li>
                 {% endif %}
 
-                {% for page in object_list.paginator.page_range %}
-                <li class="page-item {% if page == object_list.number %} active {% endif %}">
-                    <a class="page-link" href="?city={{ city }}&specialization={{ specialization }}&page={{ page }}">{{
-                        page }}
+                {% for page in page_obj.paginator.page_range %}
+                <li class="page-item {% if page == page_obj.number %} active {% endif %}">
+                    <a class="page-link" href="?city={{ city }}&specialization={{ specialization }}&page={{ page }}">{{page }}
                     </a>
                 </li>
                 {% endfor %}
 
-                {% if object_list.has_previous %}
+                {% if page_obj.has_previous %}
                 <li class="page-item">
                     <a class="page-link"
-                       href="?city={{ city }}&specialization={{ specialization }}&page={{ object_list.next_page_number }}"
+                       href="?city={{ city }}&specialization={{ specialization }}&page={{ page_obj.next_page_number }}"
                        aria-label="Next">
                         <span aria-hidden="true">&raquo;</span>
                     </a>
@@ -54,18 +53,18 @@
 
         <!--        <div class="pagination">-->
         <!--        <span class="step-links">-->
-        <!--            {% if object_list.has_previous %}-->
+        <!--            {% if page_obj.has_previous %}-->
         <!--                <a href="?city={{ city }}&specialization={{ specialization }}&page=1">&laquo; first</a>-->
-        <!--                <a href="?city={{ city }}&specialization={{ specialization }}&page={{ object_list.previous_page_number }}">previous</a>-->
+        <!--                <a href="?city={{ city }}&specialization={{ specialization }}&page={{ page_obj.previous_page_number }}">previous</a>-->
         <!--            {% endif %}-->
 
         <!--            <span class="current">-->
-        <!--                Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}.-->
+        <!--                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.-->
         <!--            </span>-->
 
-        <!--            {% if object_list.has_next %}-->
-        <!--                <a href="?city={{ city }}&specialization={{ specialization }}&page={{ object_list.next_page_number }}">next</a>-->
-        <!--                <a href="?city={{ city }}&specialization={{ specialization }}&page={{ object_list.paginator.num_pages }}">last &raquo;</a>-->
+        <!--            {% if page_obj.has_next %}-->
+        <!--                <a href="?city={{ city }}&specialization={{ specialization }}&page={{ page_obj.next_page_number }}">next</a>-->
+        <!--                <a href="?city={{ city }}&specialization={{ specialization }}&page={{ page_obj.paginator.num_pages }}">last &raquo;</a>-->
         <!--            {% endif %}-->
         <!--        </span>-->
         <!--        </div>-->

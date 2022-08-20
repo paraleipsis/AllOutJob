@@ -210,3 +210,7 @@ ENV/
 
 # mkdocs documentation
 /site
+
+**/migrations/**
+!**/migrations
+!**/migrations/__init__.py
